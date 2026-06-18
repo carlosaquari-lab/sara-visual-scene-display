@@ -2,14 +2,18 @@
 
 Sara is an experimental Visual Scene Display (VSD) application for creating interactive scene-based communication materials.
 
-This demonstration build uses an image-centred interaction model:
+# Sara 0.1.26
 
-- the visible message-composition area has been removed;
-- the main visual scene is the central element;
-- navigation thumbnails are placed in a top strip;
-- an optional support strip shows up to three visual supports;
-- support items and hotspots can trigger text/audio/TTS events, but no visible accumulated message is displayed;
-- automatic quantitative interaction logging is preserved.
+Sara is a desktop application for creating and using interactive Visual Scene Display (VSD) activities. It allows users to prepare scene-based communication materials with manually defined hotspots, configurable visual supports, optional audio or text-to-speech output, and session logging for research or professional review.
+
+The software is designed to support the preparation of visual communication activities in educational, clinical, and research contexts. Sara stores projects locally using JSON files and associated asset folders, making activities editable, reusable, and easy to inspect.
+
+This public release includes two demonstration projects:
+
+- Breakfast at Home
+- Preparing Pasta at Home
+
+The example materials are provided for demonstration purposes only and do not represent real users, patients, or clinical sessions.
 
 ## Installation
 
