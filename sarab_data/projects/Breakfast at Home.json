@@ -1,0 +1,238 @@
+{
+  "project_name": "BREAKFAST AT HOME",
+  "version": "0.1.26",
+  "initial_scene_id": "scene_1",
+  "current_scene_index": 0,
+  "window_mode": "maximized",
+  "grid": {
+    "rows": 3,
+    "cols": 4
+  },
+  "cell_text_style": {
+    "size": 9,
+    "bold": true,
+    "uppercase": true,
+    "visible": true
+  },
+  "research_settings": {
+    "enabled": false,
+    "current_user_id": "",
+    "current_user_name": ""
+  },
+  "scenes": [
+    {
+      "id": "scene_1",
+      "title": "Breakfast",
+      "background_image": "Breakfast at Home_assets\\images\\IMG_20260531_195535_d08d440db7bc.webp",
+      "scene_audio": "",
+      "scene_focus_category_id": null,
+      "scene_focus_category_label": null,
+      "scene_specific_topic": "",
+      "supports": [
+        {
+          "id": "support_1",
+          "position": 0,
+          "text": "",
+          "image_path": "Breakfast at Home_assets\\images\\IMG_20260531_104515_3f6f0ab40c15.webp",
+          "audio_path": "",
+          "tts_enabled": true,
+          "fitzgerald_enabled": false,
+          "fitzgerald_category": "none",
+          "cell_type": "visual_support",
+          "visible": true,
+          "discourse_function": "",
+          "key_typology": "none",
+          "visual_source": "local_image"
+        },
+        {
+          "id": "support_2",
+          "position": 1,
+          "text": "",
+          "image_path": "",
+          "audio_path": "",
+          "tts_enabled": true,
+          "fitzgerald_enabled": false,
+          "fitzgerald_category": "none",
+          "cell_type": "visual_support",
+          "visible": false,
+          "discourse_function": "",
+          "key_typology": "",
+          "visual_source": "none"
+        },
+        {
+          "id": "support_3",
+          "position": 2,
+          "text": "",
+          "image_path": "",
+          "audio_path": "",
+          "tts_enabled": true,
+          "fitzgerald_enabled": false,
+          "fitzgerald_category": "none",
+          "cell_type": "visual_support",
+          "visible": false,
+          "discourse_function": "",
+          "key_typology": "",
+          "visual_source": "none"
+        }
+      ],
+      "hotspots": [
+        {
+          "id": "hotspot_63fc44f8",
+          "label": "WATERMELON",
+          "text": "WATERMELON",
+          "x": 0.24396442185514614,
+          "y": 0.04915254237288136,
+          "width": 0.3634053367217281,
+          "height": 0.37457627118644066,
+          "audio_path": "",
+          "tts_enabled": true,
+          "target_scene_id": "",
+          "visible_in_design": true,
+          "vocabulary_category_id": "noun",
+          "vocabulary_category_label": "Noun / object",
+          "vocabulary_category_group": "sara_communication",
+          "label_bg_color": "#FFFFFF",
+          "label_fg_color": "#000000",
+          "label_font_size": 16,
+          "label_persistence_seconds": 5,
+          "label_persistence_always": false
+        },
+        {
+          "id": "hotspot_09e375d7",
+          "label": "BANANA",
+          "text": "BANANA",
+          "x": 0.7052096569250318,
+          "y": 0.27627118644067794,
+          "width": 0.18678526048284624,
+          "height": 0.3288135593220339,
+          "audio_path": "",
+          "tts_enabled": true,
+          "target_scene_id": "",
+          "visible_in_design": true,
+          "vocabulary_category_id": "noun",
+          "vocabulary_category_label": "Noun / object",
+          "vocabulary_category_group": "sara_communication",
+          "label_bg_color": "#FFFFFF",
+          "label_fg_color": "#000000",
+          "label_font_size": 16,
+          "label_persistence_seconds": 5,
+          "label_persistence_always": false
+        }
+      ]
+    },
+    {
+      "id": "scene_2",
+      "title": "coffee",
+      "background_image": "Breakfast at Home_assets\\images\\IMG_20260531_200212_e407c7144dcf.webp",
+      "scene_audio": "",
+      "scene_focus_category_id": null,
+      "scene_focus_category_label": null,
+      "scene_specific_topic": "",
+      "supports": [
+        {
+          "id": "support_1",
+          "position": 0,
+          "text": "COFFEE BEANS",
+          "image_path": "Breakfast at Home_assets\\images\\cofee_beans_ff5fc081d662.webp",
+          "audio_path": "Breakfast at Home_assets\\audio\\hotspot_scene_2_support_1_20260531_215124_110838.wav",
+          "tts_enabled": true,
+          "fitzgerald_enabled": false,
+          "fitzgerald_category": "noun",
+          "cell_type": "visual_support",
+          "visible": true,
+          "discourse_function": "",
+          "key_typology": "noun",
+          "visual_source": "local_image"
+        },
+        {
+          "id": "support_2",
+          "position": 1,
+          "text": "COFFEE MAKER",
+          "image_path": "Breakfast at Home_assets\\images\\IMG_20260531_104515_3f6f0ab40c15.webp",
+          "audio_path": "",
+          "tts_enabled": true,
+          "fitzgerald_enabled": false,
+          "fitzgerald_category": "noun",
+          "cell_type": "visual_support",
+          "visible": true,
+          "discourse_function": "",
+          "key_typology": "noun",
+          "visual_source": "local_image"
+        },
+        {
+          "id": "support_3",
+          "position": 2,
+          "text": "COFFEE CUP",
+          "image_path": "Breakfast at Home_assets\\images\\IMG_20260531_170651_b5b1415539de.webp",
+          "audio_path": "",
+          "tts_enabled": true,
+          "fitzgerald_enabled": false,
+          "fitzgerald_category": "noun",
+          "cell_type": "visual_support",
+          "visible": true,
+          "discourse_function": "",
+          "key_typology": "noun",
+          "visual_source": "local_image"
+        }
+      ],
+      "hotspots": []
+    },
+    {
+      "id": "scene_3",
+      "title": "Served",
+      "background_image": "Breakfast at Home_assets\\images\\IMG_20260531_200008_db6096f175eb.webp",
+      "scene_audio": "",
+      "scene_focus_category_id": null,
+      "scene_focus_category_label": null,
+      "scene_specific_topic": "",
+      "supports": [
+        {
+          "id": "support_1",
+          "position": 0,
+          "text": "",
+          "image_path": "",
+          "audio_path": "",
+          "tts_enabled": true,
+          "fitzgerald_enabled": false,
+          "fitzgerald_category": "none",
+          "cell_type": "visual_support",
+          "visible": false,
+          "discourse_function": "",
+          "key_typology": "",
+          "visual_source": "none"
+        },
+        {
+          "id": "support_2",
+          "position": 1,
+          "text": "",
+          "image_path": "",
+          "audio_path": "",
+          "tts_enabled": true,
+          "fitzgerald_enabled": false,
+          "fitzgerald_category": "none",
+          "cell_type": "visual_support",
+          "visible": false,
+          "discourse_function": "",
+          "key_typology": "",
+          "visual_source": "none"
+        },
+        {
+          "id": "support_3",
+          "position": 2,
+          "text": "",
+          "image_path": "",
+          "audio_path": "",
+          "tts_enabled": true,
+          "fitzgerald_enabled": false,
+          "fitzgerald_category": "none",
+          "cell_type": "visual_support",
+          "visible": false,
+          "discourse_function": "",
+          "key_typology": "",
+          "visual_source": "none"
+        }
+      ],
+      "hotspots": []
+    }
+  ]
+}

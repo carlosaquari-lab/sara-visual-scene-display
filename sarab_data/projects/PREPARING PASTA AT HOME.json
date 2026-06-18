@@ -1,0 +1,260 @@
+{
+  "project_name": "PREPARING PASTA AT HOME",
+  "version": "0.1.26",
+  "initial_scene_id": "scene_1",
+  "current_scene_index": 0,
+  "window_mode": "maximized",
+  "grid": {
+    "rows": 3,
+    "cols": 4
+  },
+  "cell_text_style": {
+    "size": 9,
+    "bold": true,
+    "uppercase": true,
+    "visible": true
+  },
+  "research_settings": {
+    "enabled": false,
+    "current_user_id": "",
+    "current_user_name": ""
+  },
+  "scenes": [
+    {
+      "id": "scene_1",
+      "title": "INGREDIENTS",
+      "background_image": "PREPARING PASTA AT HOME_assets\\images\\IMG_20260531_173413_8471cc767d18.webp",
+      "scene_audio": "",
+      "scene_focus_category_id": null,
+      "scene_focus_category_label": null,
+      "scene_specific_topic": "",
+      "supports": [
+        {
+          "id": "support_1",
+          "position": 0,
+          "text": "TOMATO",
+          "image_path": "PREPARING PASTA AT HOME_assets\\images\\tomato_666d33f6ed32.webp",
+          "audio_path": "",
+          "tts_enabled": true,
+          "fitzgerald_enabled": false,
+          "fitzgerald_category": "none",
+          "cell_type": "visual_support",
+          "visible": true,
+          "discourse_function": "",
+          "key_typology": "none",
+          "visual_source": "local_image"
+        },
+        {
+          "id": "support_2",
+          "position": 1,
+          "text": "PEPPER",
+          "image_path": "PREPARING PASTA AT HOME_assets\\images\\pepper_c0d6def118f2.webp",
+          "audio_path": "",
+          "tts_enabled": true,
+          "fitzgerald_enabled": false,
+          "fitzgerald_category": "none",
+          "cell_type": "visual_support",
+          "visible": true,
+          "discourse_function": "",
+          "key_typology": "none",
+          "visual_source": "local_image"
+        },
+        {
+          "id": "support_3",
+          "position": 2,
+          "text": "GARLIC",
+          "image_path": "PREPARING PASTA AT HOME_assets\\images\\garlic_3b9231c08bcf.webp",
+          "audio_path": "",
+          "tts_enabled": true,
+          "fitzgerald_enabled": false,
+          "fitzgerald_category": "none",
+          "cell_type": "visual_support",
+          "visible": true,
+          "discourse_function": "",
+          "key_typology": "none",
+          "visual_source": "local_image"
+        }
+      ],
+      "hotspots": [
+        {
+          "id": "hotspot_51e74c0a",
+          "label": "TOMATO",
+          "text": "TOMATO",
+          "x": 0.05844980940279543,
+          "y": 0.2,
+          "width": 0.21728081321473952,
+          "height": 0.3305084745762712,
+          "audio_path": "",
+          "tts_enabled": true,
+          "target_scene_id": "",
+          "visible_in_design": true,
+          "vocabulary_category_id": "noun",
+          "vocabulary_category_label": "Noun / object",
+          "vocabulary_category_group": "sara_communication",
+          "label_bg_color": "#FFFFFF",
+          "label_fg_color": "#000000",
+          "label_font_size": 16,
+          "label_persistence_seconds": 5,
+          "label_persistence_always": false
+        },
+        {
+          "id": "hotspot_7d755ea1",
+          "label": "GARLIC",
+          "text": "GARLIC",
+          "x": 0.6632782719186785,
+          "y": 0.19491525423728814,
+          "width": 0.18170266836086404,
+          "height": 0.3050847457627119,
+          "audio_path": "",
+          "tts_enabled": true,
+          "target_scene_id": "",
+          "visible_in_design": true,
+          "vocabulary_category_id": "noun",
+          "vocabulary_category_label": "Noun / object",
+          "vocabulary_category_group": "sara_communication",
+          "label_bg_color": "#FFFFFF",
+          "label_fg_color": "#000000",
+          "label_font_size": 16,
+          "label_persistence_seconds": 5,
+          "label_persistence_always": false
+        }
+      ]
+    },
+    {
+      "id": "scene_2",
+      "title": "COOKING PASTA",
+      "background_image": "PREPARING PASTA AT HOME_assets\\images\\IMG_20260531_134907_8b2ed8f315af.webp",
+      "scene_audio": "",
+      "scene_focus_category_id": null,
+      "scene_focus_category_label": null,
+      "scene_specific_topic": "",
+      "supports": [
+        {
+          "id": "support_1",
+          "position": 0,
+          "text": "",
+          "image_path": "",
+          "audio_path": "",
+          "tts_enabled": true,
+          "fitzgerald_enabled": false,
+          "fitzgerald_category": "none",
+          "cell_type": "visual_support",
+          "visible": false,
+          "discourse_function": "",
+          "key_typology": "",
+          "visual_source": "none"
+        },
+        {
+          "id": "support_2",
+          "position": 1,
+          "text": "",
+          "image_path": "",
+          "audio_path": "",
+          "tts_enabled": true,
+          "fitzgerald_enabled": false,
+          "fitzgerald_category": "none",
+          "cell_type": "visual_support",
+          "visible": false,
+          "discourse_function": "",
+          "key_typology": "",
+          "visual_source": "none"
+        },
+        {
+          "id": "support_3",
+          "position": 2,
+          "text": "",
+          "image_path": "",
+          "audio_path": "",
+          "tts_enabled": true,
+          "fitzgerald_enabled": false,
+          "fitzgerald_category": "none",
+          "cell_type": "visual_support",
+          "visible": false,
+          "discourse_function": "",
+          "key_typology": "",
+          "visual_source": "none"
+        }
+      ],
+      "hotspots": [
+        {
+          "id": "hotspot_f2205d14",
+          "label": "SPAGHETTI",
+          "text": "SPAGHETTI",
+          "x": 0.2104072398190045,
+          "y": 0.07966101694915254,
+          "width": 0.5904977375565611,
+          "height": 0.41016949152542376,
+          "audio_path": "",
+          "tts_enabled": true,
+          "target_scene_id": "",
+          "visible_in_design": true,
+          "vocabulary_category_id": "noun",
+          "vocabulary_category_label": "Noun / object",
+          "vocabulary_category_group": "sara_communication",
+          "label_bg_color": "#FFFFFF",
+          "label_fg_color": "#000000",
+          "label_font_size": 16,
+          "label_persistence_seconds": 5,
+          "label_persistence_always": false
+        }
+      ]
+    },
+    {
+      "id": "scene_3",
+      "title": "PASTA SERVED",
+      "background_image": "PREPARING PASTA AT HOME_assets\\images\\IMG_20260531_140433_0fda30001735.webp",
+      "scene_audio": "",
+      "scene_focus_category_id": null,
+      "scene_focus_category_label": null,
+      "scene_specific_topic": "",
+      "supports": [
+        {
+          "id": "support_1",
+          "position": 0,
+          "text": "",
+          "image_path": "",
+          "audio_path": "",
+          "tts_enabled": true,
+          "fitzgerald_enabled": false,
+          "fitzgerald_category": "none",
+          "cell_type": "visual_support",
+          "visible": false,
+          "discourse_function": "",
+          "key_typology": "",
+          "visual_source": "none"
+        },
+        {
+          "id": "support_2",
+          "position": 1,
+          "text": "",
+          "image_path": "",
+          "audio_path": "",
+          "tts_enabled": true,
+          "fitzgerald_enabled": false,
+          "fitzgerald_category": "none",
+          "cell_type": "visual_support",
+          "visible": false,
+          "discourse_function": "",
+          "key_typology": "",
+          "visual_source": "none"
+        },
+        {
+          "id": "support_3",
+          "position": 2,
+          "text": "",
+          "image_path": "",
+          "audio_path": "",
+          "tts_enabled": true,
+          "fitzgerald_enabled": false,
+          "fitzgerald_category": "none",
+          "cell_type": "visual_support",
+          "visible": false,
+          "discourse_function": "",
+          "key_typology": "",
+          "visual_source": "none"
+        }
+      ],
+      "hotspots": []
+    }
+  ]
+}

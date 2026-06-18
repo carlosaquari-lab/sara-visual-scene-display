@@ -1,0 +1,12 @@
+﻿cff-version: 1.2.0
+title: "Sara"
+message: "If you use Sara in your work, please cite it as below."
+type: software
+authors:
+  - family-names: "Máñez Carvajal"
+    given-names: "Carlos"
+year: 2026
+version: "0.1.26"
+license: "MIT"
+repository-code: "https://github.com/carlosaquari-lab/sara-visual-scene-display"
+url: "https://github.com/carlosaquari-lab/sara-visual-scene-display"
