@@ -1,2 +1,2 @@
 id,name,notes,group,layout_file,date_created,last_session_date,last_session_end,total_sessions,total_key_presses,total_words_inserted,total_characters_inserted,total_time_seconds
-example,Example user,Demonstration account,example,,2026-06-18,,,0,0,0,0,0
+example,Example user,Demonstration account,example,,2026-06-18,2026-06-22,2026-06-22 17:23:04,1,6,10,57,68751.86772441864
