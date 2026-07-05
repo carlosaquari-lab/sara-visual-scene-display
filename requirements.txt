@@ -1,5 +1,4 @@
 Pillow
 pyttsx3
-tkinterdnd2
 pygame
 sounddevice
