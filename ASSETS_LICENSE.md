@@ -1,51 +1,64 @@
-﻿# Asset licensing and provenance
+# Asset licensing and provenance
 
-The Sara source code is released under the MIT License. This license applies to the software source code only.
+The Sara source code is released under the MIT License. The MIT License applies to the software source code only.
 
-Documentation and article-related materials may be distributed under the Creative Commons Attribution 4.0 International License (CC BY 4.0), unless otherwise stated.
+Documentation and original supporting materials distributed with Sara may be used under the Creative Commons Attribution 4.0 International License (CC BY 4.0), unless a different license or attribution is stated below.
 
-## Example projects
+## Example project images
 
-The public repository includes the demonstration projects "Breakfast at Home" and "Preparing Pasta at Home", together with the images required to load them. They are provided only to illustrate Sara workflows.
+The public repository includes the demonstration projects "Breakfast at Home" and "PREPARING PASTA AT HOME", together with the images required to load them. These projects illustrate Sara scene, hotspot, and visual-support workflows.
 
-These materials do not depict or document identified users, patients, or real therapy sessions. No personal or clinical data are intentionally included.
+The photographs in both projects are original works by the author of Sara. They do not show identifiable people and are authorized for public distribution under the Creative Commons Attribution 4.0 International License (CC BY 4.0).
+
+The example materials do not represent patients, clinical sessions, or research participants. No personal or clinical data are included.
 
 ### Breakfast at Home
 
-The photographs distributed with "Breakfast at Home" are original demonstration photographs supplied by the Sara project author. They depict ordinary domestic objects and activities for the sole purpose of demonstrating scene, hotspot, and visual-support workflows.
+The project contains seven WebP photographs depicting ordinary breakfast objects and activities. Three are used as scene images and four as visual-support images.
 
-### Preparing Pasta at Home
+### PREPARING PASTA AT HOME
 
-The photographs distributed with "Preparing Pasta at Home" are original demonstration photographs supplied by the Sara project author. They depict ordinary domestic objects and activities for the sole purpose of demonstrating scene, hotspot, and visual-support workflows.
+The project contains seven WebP photographs depicting ordinary food-preparation objects and activities. Three are used as scene images and four as visual-support images.
 
-The example photographs are not covered by the MIT License for the Sara source code. For this repository, they are distributed as article-related demonstration materials under the Creative Commons Attribution 4.0 International License (CC BY 4.0).
-
-## Audio assets
-
-The public release does not include example audio recordings. Users may add their own local audio files to Sara projects.
-
-These user-provided audio files are not redistributed unless they are explicitly included in a project package.
+No WAV, MP3, or other example audio recordings are redistributed with either project.
 
 ## Sara interface assets
 
-The repository includes the Sara application icon, branding image, and general interface icons required to run the software. These files are distributed as part of the Sara release. The MIT License applies to the source code and does not automatically relicense visual assets as independent works.
+The repository includes the Sara application icon and branding image (`sara.ico` and `sara.png`) and 21 interface icons under `sarab_data/assets/icons/`. They are distributed as supporting materials for the Sara application under CC BY 4.0, unless a different attribution is provided with a specific file.
 
-## ARASAAC resources
+The MIT License for the Sara source code does not replace the CC BY 4.0 terms that apply to these visual materials as independent works.
 
-Sara may allow users to incorporate external visual supports, including ARASAAC pictograms, into their own projects.
+## ARASAAC integration
 
-No ARASAAC pictograms are included in this repository. ARASAAC pictograms are not part of the Sara source code and are not distributed under the MIT License. ARASAAC pictographic symbols are property of the Government of Aragón and were created by Sergio Palao for ARASAAC.
+Sara can optionally search for and download ARASAAC pictograms at runtime. No ARASAAC pictograms are physically included or redistributed in this repository; `sarab_data/arasaac_cache/` contains only a README placeholder.
 
-ARASAAC resources are governed by their own licensing terms and conditions of use. Users are responsible for complying with those terms, including attribution, non-commercial use where applicable, and any other requirements established by ARASAAC.
+Pictograms downloaded from ARASAAC are not covered by Sara's MIT License or by the CC BY 4.0 terms for Sara's original supporting materials. They remain subject to their own attribution and licensing conditions:
+
+- Author of pictograms: Sergio Palao.
+- Source: ARASAAC (https://arasaac.org/).
+- Owner: Gobierno de Aragón (Spain).
+- License: Creative Commons Attribution-NonCommercial-ShareAlike (CC BY-NC-SA).
+
+Users are responsible for complying with the applicable ARASAAC attribution, non-commercial, and share-alike requirements when using downloaded pictograms.
+
+## Runtime recordings and user assets
+
+The `sarab_data/audio/recordings/` directory contains only a README placeholder in the public repository. Audio recorded at runtime may contain personal voices or private testing material and must not be included in a public release unless it has been reviewed and explicitly approved for redistribution.
+
+Images, pictograms, audio files, and other materials added by users remain subject to their original licenses and privacy requirements. Their inclusion in a Sara project does not place them under the Sara source-code license.
 
 ## Third-party assets
 
-Users should verify the license of any third-party image, pictogram, audio file, or other asset before incorporating it into Sara projects.
+Users must verify the license and redistribution conditions of every third-party image, pictogram, audio file, or other asset added to a project. Sara's MIT License does not automatically apply to third-party or user-provided materials.
 
-The MIT License for Sara source code does not automatically apply to third-party assets, ARASAAC resources, AI-generated images, recorded audio, or user-created project materials.
+## Asset inventory
 
-## Notes for publication
+The public repository currently contains:
 
-The example materials included in this repository are intended only to demonstrate how Sara projects are structured and loaded.
-
-They should not be interpreted as clinical data, patient records, therapeutic evidence, or documentation of real interventions.
+- `sara.ico` and `sara.png` for application branding.
+- 21 interface icons in `sarab_data/assets/icons/`.
+- 7 WebP images for the "Breakfast at Home" example project.
+- 7 WebP images for the "PREPARING PASTA AT HOME" example project.
+- No redistributed example audio files.
+- No redistributed ARASAAC pictograms.
+- README placeholders for runtime recordings and the ARASAAC cache.
