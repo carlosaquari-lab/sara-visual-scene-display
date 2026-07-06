@@ -7,7 +7,7 @@ The software is designed to support the preparation of visual communication acti
 This public release includes two demonstration projects:
 
 - Breakfast at Home
-- Preparing Pasta at Home
+- PREPARING PASTA AT HOME
 
 The example materials are provided for demonstration purposes only and do not represent real users, patients, or clinical sessions.
 
@@ -55,7 +55,7 @@ The repository includes two non-clinical demonstration projects under
 `sarab_data/projects/`, together with the assets required to load them:
 
 - `Breakfast at Home`
-- `Preparing Pasta at Home`
+- `PREPARING PASTA AT HOME`
 
 During source execution, local users, settings, research logs, downloaded
 ARASAAC resources, and temporary recordings are stored under `sarab_data/`.
@@ -67,7 +67,7 @@ folder next to the executable, while bundled interface assets remain internal.
 
 Sara source code is released under the MIT License.
 
-Copyright (c) 2026 Carlos Máñez Carvajal.
+Copyright (c) 2026 Carlos Máñez-Carvajal.
 
 Documentation, article-related materials, example projects, images, audio files, and third-party resources may have different licensing conditions. See `ASSETS_LICENSE.md` for details.
 
