@@ -163,6 +163,9 @@ def test_research_logs_include_scene_focus_context(tmp_path):
     assert "current_scene_communicative_function" not in summary
     assert summary["current_scene_specific_topic"] == "mom"
     assert summary["current_scene"]["scene_focus_category_id"] == "person"
+    assert summary["scene_metadata"][0]["scene_focus_category_id"] == "person"
+    assert summary["scene_metadata"][0]["scene_focus_category_label"] == "Person / proper name"
+    assert summary["scene_metadata"][0]["scene_specific_topic"] == "mom"
 
 
 def test_session_stats_show_scene_focus_metadata():

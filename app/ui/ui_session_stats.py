@@ -75,10 +75,14 @@ def _scene_breakdown_lines(scene_rows: list[dict] | None) -> list[str]:
         return lines
     for scene in rows:
         title = str(scene.get("title") or "-")
+        category = str(scene.get("scene_focus_category_label") or "").strip() or tr("no_category")
+        topic = str(scene.get("scene_specific_topic") or "").strip() or tr("no_specific_topic")
         texts = ", ".join(label for label, _count in list(scene.get("texts") or [])[:4]) or tr("stats_no_data")
         lines.extend([
             "",
             title.upper(),
+            f"- {tr('scene_category', value=category)}",
+            f"- {tr('scene_specific_topic', value=topic)}",
             f"- {tr('stats_scene_events').capitalize()}: {scene.get('events', 0)}",
             f"- {tr('stats_scene_hotspots').capitalize()}: {scene.get('hotspots', 0)}",
             f"- {tr('stats_scene_supports').capitalize()}: {scene.get('supports', 0)}",

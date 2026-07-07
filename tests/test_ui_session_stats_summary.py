@@ -86,6 +86,107 @@ def test_session_stats_payload_and_text_include_response_marks(tmp_path):
     assert "response_mark_counts" not in text
 
 
+def test_scene_by_scene_summary_includes_category_and_topic_for_all_scenes(tmp_path):
+    research = ResearchLogger(tmp_path, schema_version="0.1-test", app_name="Sara", app_version="test")
+    research.research_enabled = True
+    research.research_ever_enabled = True
+    research.set_session_context(
+        project_title="Home",
+        scene_id="s1",
+        scene_title="Scene 1",
+        scene_index=0,
+        mode="User",
+        scene_focus_category_id="person",
+        scene_focus_category_label="Person / proper name",
+        scene_specific_topic="mom",
+    )
+    research.log_event(action="key_press", key_raw="MOM", key_type="scene_hotspot", text_inserted="MOM")
+    workflow = ResearchWorkflowService(research, FakeUsers(), FakeDialogs())
+
+    payload = workflow.build_session_stats_payload(
+        "Home",
+        0,
+        2,
+        0,
+        0,
+        "User",
+        scene_order=[
+            {
+                "id": "s1",
+                "title": "Scene 1",
+                "scene_focus_category_id": "person",
+                "scene_focus_category_label": "Person / proper name",
+                "scene_specific_topic": "mom",
+            },
+            {
+                "id": "s2",
+                "title": "Scene 2",
+                "scene_focus_category_id": "place",
+                "scene_focus_category_label": "Place",
+                "scene_specific_topic": "kitchen",
+            },
+        ],
+    )
+    text = _format_stats(**payload)
+
+    assert "SCENE 1\n- Scene category: Person / proper name\n- Specific topic: mom" in text
+    assert "SCENE 2\n- Scene category: Place\n- Specific topic: kitchen\n- Events: 0" in text
+
+
+def test_session_data_keeps_only_current_scene_category_and_topic():
+    text = _format_stats(
+        project_name="Home",
+        current_scene_index=0,
+        total_scenes=2,
+        rows=0,
+        cols=0,
+        mode="User",
+        research_enabled=True,
+        user_name="Therapist",
+        session_type="test",
+        is_anonymous=True,
+        session_counters={"session_elapsed_s": 0},
+        session_event_count=1,
+        session_id="session_1",
+        scene_title="Scene 1",
+        scene_focus_category_label="Person / proper name",
+        scene_specific_topic="mom",
+        event_summaries={
+            "scene_rows": [
+                {
+                    "title": "Scene 1",
+                    "scene_focus_category_label": "Person / proper name",
+                    "scene_specific_topic": "mom",
+                    "events": 1,
+                    "hotspots": 1,
+                    "supports": 0,
+                    "texts": [("MOM", 1)],
+                    "turn": 0,
+                    "correct": 0,
+                    "incorrect": 0,
+                },
+                {
+                    "title": "Scene 2",
+                    "scene_focus_category_label": "Place",
+                    "scene_specific_topic": "kitchen",
+                    "events": 0,
+                    "hotspots": 0,
+                    "supports": 0,
+                    "texts": [],
+                    "turn": 0,
+                    "correct": 0,
+                    "incorrect": 0,
+                },
+            ]
+        },
+    )
+
+    session_data = text.split("AUTOMATICALLY RECORDED ACTIVITY", 1)[0]
+    assert "Scene category: Person / proper name" in session_data
+    assert "Specific topic: mom" in session_data
+    assert "kitchen" not in session_data
+
+
 def test_session_stats_treat_manual_response_marks_as_session_data(tmp_path):
     research = ResearchLogger(tmp_path, schema_version="0.1-test", app_name="Sara", app_version="test")
     research.research_enabled = True

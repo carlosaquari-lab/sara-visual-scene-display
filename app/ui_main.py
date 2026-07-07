@@ -2737,6 +2737,9 @@ class SaraApp:
             {
                 "id": str(getattr(scene, "id", "") or ""),
                 "title": str(getattr(scene, "title", "") or f"Scene {idx + 1}"),
+                "scene_focus_category_id": str(getattr(scene, "scene_focus_category_id", "") or ""),
+                "scene_focus_category_label": str(getattr(scene, "scene_focus_category_label", "") or ""),
+                "scene_specific_topic": str(getattr(scene, "scene_specific_topic", "") or ""),
             }
             for idx, scene in enumerate(list(getattr(self.project, "scenes", []) or []))
         ]

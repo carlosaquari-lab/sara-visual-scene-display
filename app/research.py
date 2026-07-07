@@ -952,6 +952,53 @@ class ResearchLogger:
             "csv_path": csv_path,
         }
 
+    def _scene_metadata_snapshot(self) -> list[dict]:
+        scenes: dict[str, dict] = {}
+        ordered_keys: list[str] = []
+        if self.session_events_path.exists():
+            try:
+                with open(self.session_events_path, "r", encoding="utf-8", newline="") as fh:
+                    for row in csv.DictReader(fh):
+                        scene_key = str(row.get("scene_id") or row.get("scene_title") or "").strip()
+                        if not scene_key:
+                            continue
+                        if scene_key not in scenes:
+                            ordered_keys.append(scene_key)
+                            scenes[scene_key] = {
+                                "scene_id": str(row.get("scene_id") or "").strip(),
+                                "scene_title": str(row.get("scene_title") or "").strip(),
+                                "scene_index": str(row.get("scene_index") or "").strip(),
+                                "scene_focus_category_id": str(row.get("scene_focus_category_id") or "").strip(),
+                                "scene_focus_category_label": str(row.get("scene_focus_category_label") or "").strip(),
+                                "scene_specific_topic": str(row.get("scene_specific_topic") or "").strip(),
+                            }
+                        scene = scenes[scene_key]
+                        for field in (
+                            "scene_id",
+                            "scene_title",
+                            "scene_index",
+                            "scene_focus_category_id",
+                            "scene_focus_category_label",
+                            "scene_specific_topic",
+                        ):
+                            if not scene.get(field):
+                                scene[field] = str(row.get(field) or "").strip()
+            except Exception:
+                pass
+
+        current_key = str(self.current_scene_id or self.current_scene_title or "").strip()
+        if current_key and current_key not in scenes:
+            ordered_keys.append(current_key)
+            scenes[current_key] = {
+                "scene_id": self.current_scene_id,
+                "scene_title": self.current_scene_title,
+                "scene_index": self.current_scene_index,
+                "scene_focus_category_id": self.current_scene_focus_category_id,
+                "scene_focus_category_label": self.current_scene_focus_category_label,
+                "scene_specific_topic": self.current_scene_specific_topic,
+            }
+        return [scenes[key] for key in ordered_keys]
+
     def _build_session_summary_artifacts(self, user_id: str = "", user_name: str = "", reason: str = "", mode: str = "", layout_file: str = "") -> tuple[list[object], dict, Path]:
         safe_user_id, safe_user_name = self._sanitize_identity(user_id, user_name)
         if mode:
@@ -1026,6 +1073,7 @@ class ResearchLogger:
             "current_scene_focus_category_id": self.current_scene_focus_category_id,
             "current_scene_focus_category_label": self.current_scene_focus_category_label,
             "current_scene_specific_topic": self.current_scene_specific_topic,
+            "scene_metadata": self._scene_metadata_snapshot(),
             "support_context": {
                 "support_strip_enabled": int(getattr(self, "support_strip_enabled", 0)),
                 "support_slots_total": int(getattr(self, "support_slots_total", 0)),

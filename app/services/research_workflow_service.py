@@ -158,6 +158,9 @@ class ResearchWorkflowService:
             ordered_keys.append(scene_key)
             scenes[scene_key] = {
                 "title": scene_title,
+                "scene_focus_category_id": str(scene_info.get("scene_focus_category_id") or "").strip(),
+                "scene_focus_category_label": str(scene_info.get("scene_focus_category_label") or "").strip(),
+                "scene_specific_topic": str(scene_info.get("scene_specific_topic") or "").strip(),
                 "events": 0,
                 "hotspots": 0,
                 "supports": 0,
@@ -172,6 +175,9 @@ class ResearchWorkflowService:
             scene_title = str(row.get("scene_title") or scene_key or "-")
             scene = scenes.setdefault(scene_key, {
                 "title": scene_title,
+                "scene_focus_category_id": str(row.get("scene_focus_category_id") or "").strip(),
+                "scene_focus_category_label": str(row.get("scene_focus_category_label") or "").strip(),
+                "scene_specific_topic": str(row.get("scene_specific_topic") or "").strip(),
                 "events": 0,
                 "hotspots": 0,
                 "supports": 0,
@@ -182,6 +188,12 @@ class ResearchWorkflowService:
             })
             if scene_key not in ordered_keys:
                 ordered_keys.append(scene_key)
+            if not scene.get("scene_focus_category_id"):
+                scene["scene_focus_category_id"] = str(row.get("scene_focus_category_id") or "").strip()
+            if not scene.get("scene_focus_category_label"):
+                scene["scene_focus_category_label"] = str(row.get("scene_focus_category_label") or "").strip()
+            if not scene.get("scene_specific_topic"):
+                scene["scene_specific_topic"] = str(row.get("scene_specific_topic") or "").strip()
             scene["events"] += 1
 
             action = self._stable_key(row.get("action"))
@@ -212,6 +224,9 @@ class ResearchWorkflowService:
             scene = scenes[scene_key]
             scene_rows.append({
                 "title": scene["title"],
+                "scene_focus_category_id": scene.get("scene_focus_category_id", ""),
+                "scene_focus_category_label": scene.get("scene_focus_category_label", ""),
+                "scene_specific_topic": scene.get("scene_specific_topic", ""),
                 "events": scene["events"],
                 "hotspots": scene["hotspots"],
                 "supports": scene["supports"],
