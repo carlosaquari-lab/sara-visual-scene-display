@@ -77,7 +77,7 @@ def test_session_stats_payload_and_text_include_response_marks(tmp_path):
     assert "TEXT OUTPUTS USED" in text
     assert "HOTSPOT ACTIVITY" in text
     assert text.index("SCENE 1") < text.index("SCENE 2") < text.index("SCENE 3")
-    assert "SCENE 2\n- Events: 0" in text
+    assert "SCENE 2\n- Scene category: No category\n- Specific topic: No specific topic\n- Events: 0" in text
     assert "Response mark distribution" not in text
     assert "Last response: MOM" in text
     assert "Last mark: correct" in text
