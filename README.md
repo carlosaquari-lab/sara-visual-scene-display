@@ -13,9 +13,7 @@ The example materials are provided for demonstration purposes only and do not re
 
 ## Installation
 
-Sara 0.1.26 has been developed and tested with Python 3.12. Tkinter and Tcl/Tk
-must be available in the Python installation; they are normally included with
-the official Windows Python distribution.
+Sara 0.1.26 has been developed and tested on Microsoft Windows with Python 3.12. Microsoft Windows is the currently supported and validated environment. Linux and macOS have not been formally validated. Tkinter and Tcl/Tk must be available in the Python installation; they are normally included with the official Windows Python distribution.
 
 Install the runtime dependencies with:
 
@@ -41,13 +39,29 @@ On Windows, `run_sara.pyw` and `INICIAR_SARA.bat` provide optional launchers.
 
 ## Tests
 
+Sara 0.1.26 has a verified automated pytest suite of 211 passing tests. The suite covers:
+
+- project persistence;
+- hotspot geometry and coordinate handling, including conversion of normalized hotspot coordinates using the current rendered image dimensions;
+- hit testing;
+- movement;
+- resizing;
+- boundary handling;
+- selected Tkinter runtime-safety checks;
+- audio-recording workflows;
+- research/session logging.
+
 ```bash
 python -m compileall app tests
 python -m pytest -q
 ```
 
 Some Tkinter tests require a working graphical Tcl/Tk installation and may not
-run in a headless environment.
+run in a headless environment. No formal percentage-based code-coverage metric
+has been calculated. Manual validation remains necessary for interface layout
+and device-dependent audio recording and playback.
+
+The current verified suite result is 211 passed, 0 failed, 0 skipped, 1 warning.
 
 ## Local data and example projects
 
@@ -75,7 +89,7 @@ The included example projects contain demonstration materials for documenting
 and reproducing Sara workflows. They do not represent real users, patients, or
 therapy sessions, and no personal or clinical data are included.
 
-Sara may allow users to incorporate external visual supports, including ARASAAC pictograms, into their own projects. ARASAAC pictograms are governed by their own licensing terms and are not distributed under the MIT License.
+Sara may allow users to incorporate external visual supports, including ARASAAC pictograms, into their own projects. ARASAAC pictograms are licensed separately under CC BY-NC-SA and are not covered by Sara’s MIT license.
 
 
 ## Hotspot communication categories
@@ -102,5 +116,4 @@ Session summaries may include category-oriented metrics such as `category_counts
 
 ## Status
 
-Sara 0.1.26 is a demonstration build with hotspot usability and support visibility fixes validated by automated tests. The active development tree also includes recorded hotspot audio and generic communication-category metadata for hotspots.
-
+Sara 0.1.26 is a functional pre-1.0 release that remains under continued development and refinement.

@@ -3,7 +3,7 @@
 Base:
 - Manual validation completed after restoring SceneImageViewService.render().
 - Safety policy validated: in user mode, non-hotspot clicks do not trigger scene audio.
-- Last local validation reported by the user: 124 passed, 1 warning.
+- Last local validation: 211 passed, 0 failed, 0 skipped, 1 warning.
 
 This LIGHT package intentionally excludes:
 - .venv/
@@ -33,4 +33,3 @@ Suggested commands on Windows:
 
 Note:
 The empty folders sarab_data/projects, sarab_data/logs and sarab_data/arasaac_cache are kept so the app can recreate runtime files.
-
