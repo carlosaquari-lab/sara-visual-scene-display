@@ -29,6 +29,49 @@ def _rows(path):
         return list(csv.DictReader(f))
 
 
+def test_anonymous_session_redacts_communicative_key_raw_but_preserves_technical_values(tmp_path):
+    research = ResearchLogger(tmp_path, schema_version="0.1-sara", app_name="Sara", app_version="test")
+    research.set_participant_context(session_type="test", is_anonymous=True)
+    research.set_research_enabled(True)
+
+    research.log_event(
+        action="key_press",
+        key_raw="QUIERO AGUA",
+        key_type="visual_support",
+        text_inserted="QUIERO AGUA",
+    )
+    research.log_event(action="key_press", key_raw="DELETE", key_type="special")
+    research.log_event(action="audio_play", key_raw="scene_audio", key_type="scene_audio")
+    research.log_event(action="image_response_click", key_raw="image_response_click", key_type="image_response")
+
+    rows = _rows(research.session_events_path)
+    communicative = next(row for row in rows if row["key_type"] == "visual_support")
+    assert communicative["key_raw"] == ""
+    assert communicative["text_inserted"] == ""
+    assert {row["key_raw"] for row in rows} >= {"DELETE", "scene_audio", "image_response_click"}
+
+
+def test_anonymized_export_redacts_communicative_key_raw_but_preserves_technical_values(tmp_path):
+    research = ResearchLogger(tmp_path, schema_version="0.1-sara", app_name="Sara", app_version="test")
+    research.set_participant_context(session_type="participant", is_anonymous=False)
+    research.set_research_enabled(True)
+
+    research.log_event(
+        action="key_press",
+        key_raw="QUIERO AGUA",
+        key_type="scene_hotspot",
+        text_inserted="QUIERO AGUA",
+    )
+    research.log_event(action="key_press", key_raw="CLEAR", key_type="special")
+
+    export_dir = Path(research.export_anonymized_dataset())
+    rows = _rows(export_dir / research.session_events_path.name)
+    communicative = next(row for row in rows if row["key_type"] == "scene_hotspot")
+    assert communicative["key_raw"] == ""
+    assert communicative["text_inserted"] == ""
+    assert next(row for row in rows if row["key_type"] == "special")["key_raw"] == "CLEAR"
+
+
 def test_fast_on_off_on_uses_unique_session_ids(tmp_path):
     research = ResearchLogger(tmp_path, schema_version="0.1-sara", app_name="Sara", app_version="test")
     research.set_session_context(

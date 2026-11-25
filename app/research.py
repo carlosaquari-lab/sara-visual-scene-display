@@ -273,6 +273,24 @@ class ResearchLogger:
             return ""
         return "" if value is None else str(value)
 
+    @staticmethod
+    def _is_communicative_key_type(key_type: str = "") -> bool:
+        return str(key_type or "").strip().lower() in {
+            "story_cell",
+            "story_cell_audio",
+            "visual_support",
+            "visual_support_audio",
+            "scene_hotspot",
+            "scene_hotspot_audio",
+            "quick_phrase",
+        }
+
+    def _sanitize_key_raw(self, value: str = "", key_type: str = "", *, force_redact: bool = False) -> str:
+        raw_value = "" if value is None else str(value)
+        if (force_redact or self._should_redact_free_text()) and self._is_communicative_key_type(key_type):
+            return ""
+        return raw_value
+
     def _register_scene_dwell(self, now_ts: float | None = None) -> None:
         if not self.current_scene_id:
             return
@@ -667,6 +685,7 @@ class ResearchLogger:
 
         safe_user_id, safe_user_name = self._sanitize_identity(user_id, user_name)
         safe_text_inserted = self._sanitize_free_text(text_inserted)
+        safe_key_raw = self._sanitize_key_raw(key_raw, key_type)
         is_participant_event = self._is_participant_event(action, key_type)
         is_research_toggle = str(action or "").strip().lower() in {"toggle_research_on", "toggle_research_off"}
 
@@ -737,7 +756,7 @@ class ResearchLogger:
                 self.current_project_title,
                 event_id,
                 action,
-                key_raw,
+                safe_key_raw,
                 key_type,
                 vocabulary_category_id,
                 vocabulary_category_label,
@@ -1252,6 +1271,10 @@ class ResearchLogger:
                     row["scene_title"] = self._stable_hash(row.get("scene_title", ""), "scene_")
                     if "text_inserted" in row:
                         row["text_inserted"] = ""
+                    if "key_raw" in row:
+                        row["key_raw"] = self._sanitize_key_raw(
+                            row.get("key_raw", ""), row.get("key_type", ""), force_redact=True
+                        )
                     writer.writerow(row)
             return True
 
@@ -1270,6 +1293,10 @@ class ResearchLogger:
                     row["user_name"] = ""
                     if "text_inserted" in row:
                         row["text_inserted"] = ""
+                    if "key_raw" in row:
+                        row["key_raw"] = self._sanitize_key_raw(
+                            row.get("key_raw", ""), row.get("key_type", ""), force_redact=True
+                        )
                     writer.writerow(row)
             return True
 
@@ -1355,7 +1382,7 @@ class ResearchLogger:
             "export_type": "anonymized_dataset",
             "notes": [
                 "session_id, user_id, project_title and scene identifiers are pseudonymized with SHA-256 truncation",
-                "user_name, text_inserted and final_text are removed",
+                "user_name, communicative key_raw, text_inserted and final_text are removed",
                 "non-log files are excluded from the anonymized export",
             ],
             "exported_files": exported_files,
