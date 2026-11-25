@@ -131,17 +131,19 @@ def session_events_header() -> list[str]:
 def ensure_csv_header(path: str | Path, header: list[str]) -> None:
     path = _as_path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    needs_write = True
-    if path.exists():
-        try:
-            with path.open('r', encoding='utf-8', newline='') as f:
-                first = next(csv.reader(f), None)
-            needs_write = first != header
-        except Exception:
-            needs_write = True
-    if needs_write:
+    if not path.exists() or path.stat().st_size == 0:
         with path.open('w', encoding='utf-8', newline='') as f:
             csv.writer(f).writerow(header)
+        return
+
+    try:
+        with path.open('r', encoding='utf-8', newline='') as f:
+            first = next(csv.reader(f), None)
+    except Exception as exc:
+        raise RuntimeError(f"Could not validate CSV header; existing file was preserved: {path}") from exc
+
+    if first != header:
+        raise ValueError(f"Incompatible CSV header; existing file was preserved: {path}")
 
 
 def append_csv_row(path: str | Path, row: list[object]) -> None:
