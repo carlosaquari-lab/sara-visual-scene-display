@@ -215,6 +215,7 @@ def test_session_stats_treat_manual_response_marks_as_session_data(tmp_path):
 def test_session_stats_remain_consistent_after_changing_language_en_to_es(tmp_path):
     set_language("en")
     research = ResearchLogger(tmp_path, schema_version="0.1-test", app_name="Sara", app_version="test")
+    research.set_participant_context(session_type="participant", is_anonymous=False)
     research.research_enabled = True
     research.research_ever_enabled = True
     research.set_session_context(project_title="Park", scene_id="s1", scene_title="Scene 1", scene_index=0, mode="User")
@@ -260,6 +261,7 @@ def test_session_stats_remain_consistent_after_changing_language_en_to_es(tmp_pa
 def test_session_stats_remain_consistent_after_changing_language_es_to_en(tmp_path):
     set_language("es")
     research = ResearchLogger(tmp_path, schema_version="0.1-test", app_name="Sara", app_version="test")
+    research.set_participant_context(session_type="participant", is_anonymous=False)
     research.research_enabled = True
     research.research_ever_enabled = True
     research.set_session_context(project_title="Casa", scene_id="s1", scene_title="Escena 1", scene_index=0, mode="User")

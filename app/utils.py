@@ -1,5 +1,6 @@
 import json
 import os
+import tempfile
 import tkinter as tk
 from typing import Iterable
 
@@ -18,8 +19,30 @@ def load_json(path: str, default):
 
 
 def save_json(path: str, payload) -> None:
-    with open(path, "w", encoding="utf-8") as fh:
-        json.dump(payload, fh, indent=2, ensure_ascii=False)
+    destination = os.path.abspath(path)
+    directory = os.path.dirname(destination)
+    temporary_path = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            encoding="utf-8",
+            dir=directory,
+            prefix=f".{os.path.basename(destination)}.",
+            suffix=".tmp",
+            delete=False,
+        ) as fh:
+            temporary_path = fh.name
+            json.dump(payload, fh, indent=2, ensure_ascii=False)
+            fh.flush()
+            os.fsync(fh.fileno())
+        os.replace(temporary_path, destination)
+        temporary_path = None
+    finally:
+        if temporary_path is not None:
+            try:
+                os.unlink(temporary_path)
+            except OSError:
+                pass
 
 
 def maximize_window(root: tk.Tk) -> None:

@@ -88,6 +88,7 @@ class ResearchLogger:
         self._visited_scenes = set()
         self._last_persistence_issue = None
         self._last_persistence_success = None
+        self.preserved_incompatible_csv_files = []
 
         self.session_counters = self._empty_counters()
         self.word_counter = Counter()
@@ -272,6 +273,24 @@ class ResearchLogger:
         if self._should_redact_free_text():
             return ""
         return "" if value is None else str(value)
+
+    @staticmethod
+    def _is_communicative_key_type(key_type: str = "") -> bool:
+        return str(key_type or "").strip().lower() in {
+            "story_cell",
+            "story_cell_audio",
+            "visual_support",
+            "visual_support_audio",
+            "scene_hotspot",
+            "scene_hotspot_audio",
+            "quick_phrase",
+        }
+
+    def _sanitize_key_raw(self, value: str = "", key_type: str = "", *, force_redact: bool = False) -> str:
+        raw_value = "" if value is None else str(value)
+        if (force_redact or self._should_redact_free_text()) and self._is_communicative_key_type(key_type):
+            return ""
+        return raw_value
 
     def _register_scene_dwell(self, now_ts: float | None = None) -> None:
         if not self.current_scene_id:
@@ -575,10 +594,23 @@ class ResearchLogger:
         self._last_persistence_issue = None
 
     def _ensure_session_summary_header(self) -> None:
-        ensure_csv_header(self.session_summary_path, self._summary_header())
+        self._ensure_cumulative_csv_header(self.session_summary_path, self._summary_header())
 
     def _ensure_global_log_header(self) -> None:
-        ensure_csv_header(self.global_log_path, global_log_header())
+        self._ensure_cumulative_csv_header(self.global_log_path, global_log_header())
+
+    def _ensure_cumulative_csv_header(self, path: Path, header: list[str]) -> None:
+        try:
+            ensure_csv_header(path, header)
+            return
+        except ValueError as exc:
+            preserved_path = path.with_name(
+                f"{path.stem}.incompatible_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}_{uuid4().hex[:8]}{path.suffix}"
+            )
+            path.replace(preserved_path)
+            self.preserved_incompatible_csv_files.append(str(preserved_path))
+            self._record_persistence_issue(f"preserve_incompatible_csv:{path.name}", exc)
+        ensure_csv_header(path, header)
 
     def _init_session_events_file(self) -> None:
         ensure_csv_header(self.session_events_path, session_events_header())
@@ -667,6 +699,7 @@ class ResearchLogger:
 
         safe_user_id, safe_user_name = self._sanitize_identity(user_id, user_name)
         safe_text_inserted = self._sanitize_free_text(text_inserted)
+        safe_key_raw = self._sanitize_key_raw(key_raw, key_type)
         is_participant_event = self._is_participant_event(action, key_type)
         is_research_toggle = str(action or "").strip().lower() in {"toggle_research_on", "toggle_research_off"}
 
@@ -737,7 +770,7 @@ class ResearchLogger:
                 self.current_project_title,
                 event_id,
                 action,
-                key_raw,
+                safe_key_raw,
                 key_type,
                 vocabulary_category_id,
                 vocabulary_category_label,
@@ -1043,6 +1076,7 @@ class ResearchLogger:
         ]
         json_path = self.logs_dir / f"session_summary_{self.session_id}.json"
         top_words = [] if self._should_redact_free_text() else self.word_counter.most_common(50)
+        top_quick_phrases = [] if self._should_redact_free_text() else self.quick_phrase_counter.most_common(50)
         top_keys = [] if self._should_redact_free_text() else self.key_counter.most_common(50)
         payload = {
             "timestamp": now,
@@ -1088,7 +1122,8 @@ class ResearchLogger:
             "counters": dict(self.session_counters),
             "audio_sources": dict(self.audio_source_counter),
             "top_words": top_words,
-            "top_quick_phrases": self.quick_phrase_counter.most_common(50),
+            "top_quick_phrases": top_quick_phrases,
+            "quick_phrase_use_count": sum(self.quick_phrase_counter.values()),
             "top_keys": top_keys,
             "top_system_actions": self.system_action_counter.most_common(50),
             "top_pressed_elements": self.pressed_element_counter.most_common(50),
@@ -1252,6 +1287,10 @@ class ResearchLogger:
                     row["scene_title"] = self._stable_hash(row.get("scene_title", ""), "scene_")
                     if "text_inserted" in row:
                         row["text_inserted"] = ""
+                    if "key_raw" in row:
+                        row["key_raw"] = self._sanitize_key_raw(
+                            row.get("key_raw", ""), row.get("key_type", ""), force_redact=True
+                        )
                     writer.writerow(row)
             return True
 
@@ -1270,6 +1309,10 @@ class ResearchLogger:
                     row["user_name"] = ""
                     if "text_inserted" in row:
                         row["text_inserted"] = ""
+                    if "key_raw" in row:
+                        row["key_raw"] = self._sanitize_key_raw(
+                            row.get("key_raw", ""), row.get("key_type", ""), force_redact=True
+                        )
                     writer.writerow(row)
             return True
 
@@ -1308,10 +1351,31 @@ class ResearchLogger:
         payload["final_text"] = ""
         payload["final_text_len_chars"] = 0
         payload["final_text_len_tokens"] = 0
+        quick_phrases = payload.get("top_quick_phrases") or []
+        if "quick_phrase_use_count" not in payload:
+            payload["quick_phrase_use_count"] = sum(
+                int(item[1]) for item in quick_phrases if isinstance(item, (list, tuple)) and len(item) >= 2
+            )
+        quick_phrase_values = {
+            str(item[0]) for item in quick_phrases if isinstance(item, (list, tuple)) and len(item) >= 2
+        }
+        payload["top_quick_phrases"] = []
+        payload["top_keys"] = [
+            item
+            for item in (payload.get("top_keys") or [])
+            if not (isinstance(item, (list, tuple)) and item and str(item[0]) in quick_phrase_values)
+        ]
         current_scene = payload.get("current_scene") or {}
         if isinstance(current_scene, dict):
             current_scene["scene_id"] = self._stable_hash(current_scene.get("scene_id", ""), "scene_")
             current_scene["scene_title"] = self._stable_hash(current_scene.get("scene_title", ""), "scene_")
+        scene_metadata = payload.get("scene_metadata") or []
+        if isinstance(scene_metadata, list):
+            for scene in scene_metadata:
+                if not isinstance(scene, dict):
+                    continue
+                scene["scene_id"] = self._stable_hash(scene.get("scene_id", ""), "scene_")
+                scene["scene_title"] = self._stable_hash(scene.get("scene_title", ""), "scene_")
         dwell = payload.get("scene_dwell_seconds") or {}
         if isinstance(dwell, dict):
             payload["scene_dwell_seconds"] = {
@@ -1355,7 +1419,7 @@ class ResearchLogger:
             "export_type": "anonymized_dataset",
             "notes": [
                 "session_id, user_id, project_title and scene identifiers are pseudonymized with SHA-256 truncation",
-                "user_name, text_inserted and final_text are removed",
+                "user_name, communicative key_raw, text_inserted and final_text are removed",
                 "non-log files are excluded from the anonymized export",
             ],
             "exported_files": exported_files,

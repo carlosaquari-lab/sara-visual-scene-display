@@ -545,7 +545,7 @@ class SceneEditorDialog(_BaseDialog):
         ttk.Label(container, text=tr("specific_topic")).grid(row=5, column=0, sticky="w")
         self.scene_specific_topic_var = tk.StringVar(value=getattr(self.scene, "scene_specific_topic", "") or "")
         ttk.Entry(container, textvariable=self.scene_specific_topic_var, width=40).grid(row=6, column=0, columnspan=3, sticky="ew", pady=(0, 4))
-        ttk.Label(container, text=tr("clinician_quick_annotations"), foreground="#555555").grid(row=7, column=0, columnspan=3, sticky="w", pady=(0, 10))
+        ttk.Label(container, text=tr("clinician_quick_annotations"), foreground="#555555", wraplength=600).grid(row=7, column=0, columnspan=3, sticky="w", pady=(0, 10))
 
         self._section_label(container, 8, 2, "image_section")
         image_buttons = ttk.Frame(container)

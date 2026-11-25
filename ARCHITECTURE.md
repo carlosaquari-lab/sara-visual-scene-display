@@ -1,6 +1,6 @@
 ﻿# Sara Architecture
 
-Version: Sara 0.1.26
+Version: Sara 0.1.27
 
 This document describes the current software architecture of Sara as implemented in the codebase. It is intended for technical maintenance, reproducibility, and as a basis for a future "Implementation and architecture" section in a SoftwareX article.
 

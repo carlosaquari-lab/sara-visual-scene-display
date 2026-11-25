@@ -1,8 +1,12 @@
 from __future__ import annotations
 
 from pathlib import Path
+import wave
+
+import pytest
 
 from app.services.audio_recording_service import (
+    WavRecordingSession,
     ensure_recording_dir,
     fallback_recordings_dir,
     project_audio_assets_dir,
@@ -10,6 +14,36 @@ from app.services.audio_recording_service import (
     recording_filename,
     recording_path_for_hotspot,
 )
+
+
+class FakeStream:
+    def __init__(self, *, fail_start=False):
+        self.fail_start = fail_start
+        self.started = False
+        self.stopped = False
+        self.closed = False
+
+    def start(self):
+        if self.fail_start:
+            raise RuntimeError("microphone unavailable")
+        self.started = True
+
+    def stop(self):
+        self.stopped = True
+
+    def close(self):
+        self.closed = True
+
+
+class FakeSoundDevice:
+    def __init__(self, *, fail_create=False, fail_start=False):
+        self.fail_create = fail_create
+        self.stream = FakeStream(fail_start=fail_start)
+
+    def InputStream(self, **_kwargs):
+        if self.fail_create:
+            raise RuntimeError("cannot create input stream")
+        return self.stream
 
 
 def test_recording_filename_uses_hotspot_scene_timestamp_and_is_unique():
@@ -89,3 +123,68 @@ def test_recording_path_helpers_do_not_modify_project_json(tmp_path):
 
     assert project_path.read_text(encoding="utf-8") == original
     assert list(tmp_path.glob("*.json")) == [project_path]
+
+
+def test_recording_start_cleans_up_when_input_stream_creation_fails(tmp_path):
+    destination = tmp_path / "failed.wav"
+    session = WavRecordingSession(destination, sounddevice_module=FakeSoundDevice(fail_create=True))
+
+    with pytest.raises(RuntimeError, match="cannot create input stream"):
+        session.start()
+
+    assert not destination.exists()
+    assert session._wav_file is None
+    assert session._stream is None
+    assert session.is_recording is False
+
+
+def test_recording_start_cleans_up_stream_and_file_when_stream_start_fails(tmp_path):
+    destination = tmp_path / "failed.wav"
+    sounddevice = FakeSoundDevice(fail_start=True)
+    session = WavRecordingSession(destination, sounddevice_module=sounddevice)
+
+    with pytest.raises(RuntimeError, match="microphone unavailable"):
+        session.start()
+
+    assert sounddevice.stream.stopped is True
+    assert sounddevice.stream.closed is True
+    assert not destination.exists()
+    assert session._wav_file is None
+    assert session._stream is None
+    assert session.is_recording is False
+
+
+def test_recording_start_cleans_up_when_sounddevice_loading_fails(tmp_path, monkeypatch):
+    destination = tmp_path / "failed.wav"
+    session = WavRecordingSession(destination)
+
+    def fail_loading():
+        raise ImportError("sounddevice unavailable")
+
+    monkeypatch.setattr(session, "_get_sounddevice", fail_loading)
+    with pytest.raises(ImportError, match="sounddevice unavailable"):
+        session.start()
+
+    assert not destination.exists()
+    assert session._wav_file is None
+    assert session._stream is None
+    assert session.is_recording is False
+
+
+def test_recording_start_then_stop_produces_valid_wav_and_releases_stream(tmp_path):
+    destination = tmp_path / "recording.wav"
+    sounddevice = FakeSoundDevice()
+    session = WavRecordingSession(destination, samplerate=16000, sounddevice_module=sounddevice)
+
+    assert session.start() == destination
+    assert session.is_recording is True
+    assert session.stop() == destination
+
+    assert sounddevice.stream.started is True
+    assert sounddevice.stream.stopped is True
+    assert sounddevice.stream.closed is True
+    assert session.is_recording is False
+    with wave.open(str(destination), "rb") as wav_file:
+        assert wav_file.getnchannels() == 1
+        assert wav_file.getframerate() == 16000
+        assert wav_file.getsampwidth() == 2

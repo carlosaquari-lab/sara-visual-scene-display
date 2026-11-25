@@ -1,9 +1,9 @@
-﻿Sara 0.1.26 — support visibility fixed LIGHT package
+﻿Sara 0.1.27 — support visibility fixed LIGHT package
 
 Base:
 - Manual validation completed after restoring SceneImageViewService.render().
 - Safety policy validated: in user mode, non-hotspot clicks do not trigger scene audio.
-- Last local validation: 211 passed, 0 failed, 0 skipped, 1 warning.
+- Last local validation: 241 passed, 0 failed, 0 skipped.
 
 This LIGHT package intentionally excludes:
 - .venv/

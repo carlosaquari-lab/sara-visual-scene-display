@@ -5,8 +5,8 @@ import sys
 APP_TITLE = "Sara"
 APP_SUBTITLE = "Experimental visual scene displays with hotspots and optional visual supports"
 AUTHOR = "Carlos Máñez Carvajal"
-APP_VERSION = "0.1.26"
-APP_DISPLAY_VERSION = "0.1.26"
+APP_VERSION = "0.1.27"
+APP_DISPLAY_VERSION = "0.1.27"
 LICENSE_LINE = "MIT License"
 CITE_LINE = (
     "Máñez Carvajal, C. (2026). "
@@ -32,7 +32,7 @@ SUPPORT_CARD_VERTICAL_GAP = 52
 SUPPORT_CARD_VERTICAL_GAP_DESIGN = 42
 SUPPORT_CARD_VERTICAL_GAP_USER = 52
 SUPPORT_CARD_DESIGN_CONTROL_HEIGHT = 30
-SUPPORT_IMAGE_FIT_MODE = "cover"
+SUPPORT_IMAGE_FIT_MODE = "contain"
 CELL_IMAGE_FIT_MODE = "contain"
 LOGS_DIR = DATA_DIR / "logs"
 ASSETS_DIR = (BUNDLED_DATA_DIR / "assets") if IS_FROZEN else DATA_DIR / "assets"

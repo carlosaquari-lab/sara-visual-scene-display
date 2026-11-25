@@ -1,4 +1,4 @@
-﻿# Sara 0.1.26
+﻿# Sara 0.1.27
 
 Sara is a desktop application for creating and using interactive Visual Scene Display (VSD) activities. It allows users to prepare scene-based communication materials with manually defined hotspots, configurable visual supports, optional audio or text-to-speech output, and session logging for research or professional review.
 
@@ -13,7 +13,7 @@ The example materials are provided for demonstration purposes only and do not re
 
 ## Installation
 
-Sara 0.1.26 has been developed and tested on Microsoft Windows with Python 3.12. Microsoft Windows is the currently supported and validated environment. Linux and macOS have not been formally validated. Tkinter and Tcl/Tk must be available in the Python installation; they are normally included with the official Windows Python distribution.
+Sara 0.1.27 has been developed and tested on Microsoft Windows with Python 3.12. Microsoft Windows is the currently supported and validated environment. Linux and macOS have not been formally validated. Tkinter and Tcl/Tk must be available in the Python installation; they are normally included with the official Windows Python distribution.
 
 Install the runtime dependencies with:
 
@@ -39,7 +39,7 @@ On Windows, `run_sara.pyw` and `INICIAR_SARA.bat` provide optional launchers.
 
 ## Tests
 
-Sara 0.1.26 has a verified automated pytest suite of 211 passing tests. The suite covers:
+Sara 0.1.27 has a verified automated pytest suite of 241 passing tests. The suite covers:
 
 - project persistence;
 - hotspot geometry and coordinate handling, including conversion of normalized hotspot coordinates using the current rendered image dimensions;
@@ -116,4 +116,4 @@ Session summaries may include category-oriented metrics such as `category_counts
 
 ## Status
 
-Sara 0.1.26 is a functional pre-1.0 release that remains under continued development and refinement.
+Sara 0.1.27 is a functional pre-1.0 release that remains under continued development and refinement.
