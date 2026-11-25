@@ -1062,6 +1062,7 @@ class ResearchLogger:
         ]
         json_path = self.logs_dir / f"session_summary_{self.session_id}.json"
         top_words = [] if self._should_redact_free_text() else self.word_counter.most_common(50)
+        top_quick_phrases = [] if self._should_redact_free_text() else self.quick_phrase_counter.most_common(50)
         top_keys = [] if self._should_redact_free_text() else self.key_counter.most_common(50)
         payload = {
             "timestamp": now,
@@ -1107,7 +1108,8 @@ class ResearchLogger:
             "counters": dict(self.session_counters),
             "audio_sources": dict(self.audio_source_counter),
             "top_words": top_words,
-            "top_quick_phrases": self.quick_phrase_counter.most_common(50),
+            "top_quick_phrases": top_quick_phrases,
+            "quick_phrase_use_count": sum(self.quick_phrase_counter.values()),
             "top_keys": top_keys,
             "top_system_actions": self.system_action_counter.most_common(50),
             "top_pressed_elements": self.pressed_element_counter.most_common(50),
@@ -1335,10 +1337,31 @@ class ResearchLogger:
         payload["final_text"] = ""
         payload["final_text_len_chars"] = 0
         payload["final_text_len_tokens"] = 0
+        quick_phrases = payload.get("top_quick_phrases") or []
+        if "quick_phrase_use_count" not in payload:
+            payload["quick_phrase_use_count"] = sum(
+                int(item[1]) for item in quick_phrases if isinstance(item, (list, tuple)) and len(item) >= 2
+            )
+        quick_phrase_values = {
+            str(item[0]) for item in quick_phrases if isinstance(item, (list, tuple)) and len(item) >= 2
+        }
+        payload["top_quick_phrases"] = []
+        payload["top_keys"] = [
+            item
+            for item in (payload.get("top_keys") or [])
+            if not (isinstance(item, (list, tuple)) and item and str(item[0]) in quick_phrase_values)
+        ]
         current_scene = payload.get("current_scene") or {}
         if isinstance(current_scene, dict):
             current_scene["scene_id"] = self._stable_hash(current_scene.get("scene_id", ""), "scene_")
             current_scene["scene_title"] = self._stable_hash(current_scene.get("scene_title", ""), "scene_")
+        scene_metadata = payload.get("scene_metadata") or []
+        if isinstance(scene_metadata, list):
+            for scene in scene_metadata:
+                if not isinstance(scene, dict):
+                    continue
+                scene["scene_id"] = self._stable_hash(scene.get("scene_id", ""), "scene_")
+                scene["scene_title"] = self._stable_hash(scene.get("scene_title", ""), "scene_")
         dwell = payload.get("scene_dwell_seconds") or {}
         if isinstance(dwell, dict):
             payload["scene_dwell_seconds"] = {

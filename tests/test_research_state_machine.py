@@ -72,6 +72,69 @@ def test_anonymized_export_redacts_communicative_key_raw_but_preserves_technical
     assert next(row for row in rows if row["key_type"] == "special")["key_raw"] == "CLEAR"
 
 
+def test_anonymous_session_summary_removes_quick_phrase_text_but_keeps_count(tmp_path):
+    research = ResearchLogger(tmp_path, schema_version="0.1-sara", app_name="Sara", app_version="test")
+    research.set_participant_context(session_type="test", is_anonymous=True)
+    research.set_research_enabled(True)
+
+    research.log_event(
+        action="key_press",
+        key_raw="I NEED A BREAK",
+        key_type="quick_phrase",
+        text_inserted="I NEED A BREAK",
+    )
+    summary_path = Path(research.write_session_summary(reason="test"))
+    payload = json.loads(summary_path.read_text(encoding="utf-8"))
+
+    assert payload["top_quick_phrases"] == []
+    assert payload["top_keys"] == []
+    assert payload["quick_phrase_use_count"] == 1
+    assert "I NEED A BREAK" not in summary_path.read_text(encoding="utf-8")
+
+
+def test_anonymized_export_removes_quick_phrase_text_but_keeps_count(tmp_path):
+    research = ResearchLogger(tmp_path, schema_version="0.1-sara", app_name="Sara", app_version="test")
+    research.set_participant_context(session_type="participant", is_anonymous=False)
+    research.set_research_enabled(True)
+    research.log_event(
+        action="key_press",
+        key_raw="I NEED A BREAK",
+        key_type="quick_phrase",
+        text_inserted="I NEED A BREAK",
+    )
+    research.log_event(action="key_press", key_raw="DELETE", key_type="special")
+    summary_path = Path(research.write_session_summary(reason="test"))
+    assert "I NEED A BREAK" in summary_path.read_text(encoding="utf-8")
+
+    export_dir = Path(research.export_anonymized_dataset())
+    exported_summary = export_dir / summary_path.name
+    payload = json.loads(exported_summary.read_text(encoding="utf-8"))
+
+    assert payload["top_quick_phrases"] == []
+    assert payload["top_keys"] == []
+    assert payload["top_system_actions"] == [["DELETE", 1]]
+    assert payload["quick_phrase_use_count"] == 1
+    assert "I NEED A BREAK" not in exported_summary.read_text(encoding="utf-8")
+
+
+def test_anonymized_export_pseudonymizes_scene_metadata_identifiers_and_titles(tmp_path):
+    research = ResearchLogger(tmp_path, schema_version="0.1-sara", app_name="Sara", app_version="test")
+    research.set_participant_context(session_type="participant", is_anonymous=False)
+    research.set_research_enabled(True)
+    research.set_session_context(scene_id="private_scene_id", scene_title="Private scene title", scene_index=2)
+    research.log_event(action="key_press", key_raw="DELETE", key_type="special")
+    summary_path = Path(research.write_session_summary(reason="test"))
+
+    export_dir = Path(research.export_anonymized_dataset())
+    payload = json.loads((export_dir / summary_path.name).read_text(encoding="utf-8"))
+    metadata = payload["scene_metadata"][0]
+
+    assert metadata["scene_id"].startswith("scene_")
+    assert metadata["scene_title"].startswith("scene_")
+    assert metadata["scene_id"] != "private_scene_id"
+    assert metadata["scene_title"] != "Private scene title"
+
+
 def test_fast_on_off_on_uses_unique_session_ids(tmp_path):
     research = ResearchLogger(tmp_path, schema_version="0.1-sara", app_name="Sara", app_version="test")
     research.set_session_context(
