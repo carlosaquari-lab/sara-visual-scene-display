@@ -88,6 +88,7 @@ class ResearchLogger:
         self._visited_scenes = set()
         self._last_persistence_issue = None
         self._last_persistence_success = None
+        self.preserved_incompatible_csv_files = []
 
         self.session_counters = self._empty_counters()
         self.word_counter = Counter()
@@ -593,10 +594,23 @@ class ResearchLogger:
         self._last_persistence_issue = None
 
     def _ensure_session_summary_header(self) -> None:
-        ensure_csv_header(self.session_summary_path, self._summary_header())
+        self._ensure_cumulative_csv_header(self.session_summary_path, self._summary_header())
 
     def _ensure_global_log_header(self) -> None:
-        ensure_csv_header(self.global_log_path, global_log_header())
+        self._ensure_cumulative_csv_header(self.global_log_path, global_log_header())
+
+    def _ensure_cumulative_csv_header(self, path: Path, header: list[str]) -> None:
+        try:
+            ensure_csv_header(path, header)
+            return
+        except ValueError as exc:
+            preserved_path = path.with_name(
+                f"{path.stem}.incompatible_{datetime.now().strftime('%Y%m%d_%H%M%S_%f')}_{uuid4().hex[:8]}{path.suffix}"
+            )
+            path.replace(preserved_path)
+            self.preserved_incompatible_csv_files.append(str(preserved_path))
+            self._record_persistence_issue(f"preserve_incompatible_csv:{path.name}", exc)
+        ensure_csv_header(path, header)
 
     def _init_session_events_file(self) -> None:
         ensure_csv_header(self.session_events_path, session_events_header())
