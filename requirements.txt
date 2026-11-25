@@ -2,3 +2,4 @@ Pillow
 pyttsx3
 pygame
 sounddevice
+numpy
