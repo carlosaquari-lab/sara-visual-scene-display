@@ -5,8 +5,8 @@ import sys
 APP_TITLE = "Sara"
 APP_SUBTITLE = "Experimental visual scene displays with hotspots and optional visual supports"
 AUTHOR = "Carlos Máñez Carvajal"
-APP_VERSION = "0.1.26"
-APP_DISPLAY_VERSION = "0.1.26"
+APP_VERSION = "0.1.27"
+APP_DISPLAY_VERSION = "0.1.27"
 LICENSE_LINE = "MIT License"
 CITE_LINE = (
     "Máñez Carvajal, C. (2026). "
