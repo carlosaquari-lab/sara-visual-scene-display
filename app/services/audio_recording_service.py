@@ -128,20 +128,46 @@ class WavRecordingSession:
             if self._started:
                 return self.destination
             ensure_recording_dir(self.destination.parent)
-            self._wav_file = wave.open(str(self.destination), "wb")
-            self._wav_file.setnchannels(self.channels)
-            self._wav_file.setsampwidth(2)
-            self._wav_file.setframerate(self.samplerate)
-            sd = self._get_sounddevice()
-            self._stream = sd.InputStream(
-                samplerate=self.samplerate,
-                channels=self.channels,
-                dtype="int16",
-                callback=self._callback,
-            )
-            self._stream.start()
-            self._started = True
-            return self.destination
+            try:
+                self._wav_file = wave.open(str(self.destination), "wb")
+                self._wav_file.setnchannels(self.channels)
+                self._wav_file.setsampwidth(2)
+                self._wav_file.setframerate(self.samplerate)
+                sd = self._get_sounddevice()
+                self._stream = sd.InputStream(
+                    samplerate=self.samplerate,
+                    channels=self.channels,
+                    dtype="int16",
+                    callback=self._callback,
+                )
+                self._stream.start()
+                self._started = True
+                return self.destination
+            except Exception:
+                stream = self._stream
+                wav_file = self._wav_file
+                self._stream = None
+                self._wav_file = None
+                self._started = False
+                if stream is not None:
+                    try:
+                        stream.stop()
+                    except Exception:
+                        pass
+                    try:
+                        stream.close()
+                    except Exception:
+                        pass
+                if wav_file is not None:
+                    try:
+                        wav_file.close()
+                    except Exception:
+                        pass
+                try:
+                    self.destination.unlink(missing_ok=True)
+                except Exception:
+                    pass
+                raise
 
     def stop(self) -> Path:
         with self._lock:
